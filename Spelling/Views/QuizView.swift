@@ -11,6 +11,7 @@ struct QuizView: View {
     
     // MARK: Stored properties
     @State var currentItem = itemsToSpell.randomElement()!
+    @State var userGuess = ""
     
     // MARK: Computed properties
     var body: some View {
@@ -19,8 +20,34 @@ struct QuizView: View {
             Image(currentItem.imageName)
                 .resizable()
                 .scaledToFit()
+            
+            TextField("Enter the name of the item", text: $userGuess)
+                .padding(.horizontal)
+            
+            HStack {
+                
+                Spacer()
+                
+                Button(action: {
+                    //Check guess against actual word
+                    checkGuess()
+                }, label: {
+                    Text("Submit")
+                }).padding()
+                
+            }
         }
         
+    }
+    
+    //MARK: Functions
+    
+    func checkGuess() {
+        if userGuess == currentItem.word{
+            print("Correct")
+        } else {
+            print("Incorrect")
+        }
     }
 }
 
