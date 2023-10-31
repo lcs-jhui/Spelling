@@ -14,6 +14,7 @@ struct QuizView: View {
     @State var userGuess = ""
     @State var currentOutcome: Outcome = .undetermined
     @State var history: [Result] = []
+    @State var selectedOutcomeFilter: Outcome = .undetermined
     
     // MARK: Computed properties
     var body: some View {
@@ -52,19 +53,31 @@ struct QuizView: View {
                 }
             }
             
-            List(history) { currentResult in
-                HStack{
-                    Image(currentResult.item.imageName)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 25)
+            VStack {
+                
+                Picker("Filtering On", selection: $selectedOutcomeFilter) {
                     
-                    Text(currentResult.guessProvided)
+                    Text("All Results").tag(Outcome.undetermined)
+                    Text("Correct Answers").tag(Outcome.correct)
+                    Text("Incorrect Answers").tag(Outcome.incorrect)
                     
-                    Spacer()
-                    
-                    Text(currentResult.outcome.rawValue)
+                }.padding(.horizontal)
+                
+                List(filtering(originalList: history, on: selectedOutcomeFilter)) { currentResult in
+                    HStack{
+                        Image(currentResult.item.imageName)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 25)
+                        
+                        Text(currentResult.guessProvided)
+                        
+                        Spacer()
+                        
+                        Text(currentResult.outcome.rawValue)
+                    }
                 }
+                
             }
         }
         
@@ -102,6 +115,8 @@ struct QuizView: View {
         userGuess = ""
         currentOutcome = .undetermined
     }
+    
+    
 }
 
 #Preview {
